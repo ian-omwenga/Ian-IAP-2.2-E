@@ -45,4 +45,7 @@ class dbconnect{
                 break;
         }
     }
+    function getConnection(){
+        return $this->connection;
+    }
 }

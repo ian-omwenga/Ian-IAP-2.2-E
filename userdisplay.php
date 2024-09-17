@@ -19,7 +19,7 @@ class userdisplay {
     }
 }
 
-$database = new Database();
+
 $db = $database->getConnection();
 $userDisplay = new userdisplay($db);
 $users = $userDisplay->readAll();

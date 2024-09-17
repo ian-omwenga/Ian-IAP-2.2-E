@@ -17,6 +17,27 @@ CREATE IF NOT EXISTS TABLE users(
 */
 
 
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE IF NOT EXISTS `users` (
+  `userId` bigint(10) NOT NULL AUTO_INCREMENT,
+  `fullname` varchar(50) NOT NULL DEFAULT '',
+  `email` varchar(50) NOT NULL DEFAULT '',
+  `username` varchar(50) NOT NULL DEFAULT '',
+  `password` varchar(60) NOT NULL DEFAULT '',
+  `updated` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `created` datetime NOT NULL DEFAULT current_timestamp(),
+  `genderId` tinyint(1) NOT NULL DEFAULT 0,
+  `roleId` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`userId`),
+  UNIQUE KEY `username` (`username`),
+  UNIQUE KEY `email` (`email`),
+  KEY `genderId` (`genderId`),
+  KEY `roleId` (`roleId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
@@ -51,25 +72,6 @@ CREATE TABLE IF NOT EXISTS `roles` (
   UNIQUE KEY `role` (`role`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-
-
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE IF NOT EXISTS `users` (
-  `userId` bigint(10) NOT NULL AUTO_INCREMENT,
-  `fullname` varchar(50) NOT NULL DEFAULT '',
-  `email` varchar(50) NOT NULL DEFAULT '',
-  `username` varchar(50) NOT NULL DEFAULT '',
-  `password` varchar(60) NOT NULL DEFAULT '',
-  `updated` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `created` datetime NOT NULL DEFAULT current_timestamp(),
-  `genderId` tinyint(1) NOT NULL DEFAULT 0,
-  `roleId` tinyint(1) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`userId`),
-  UNIQUE KEY `username` (`username`),
-  UNIQUE KEY `email` (`email`),
-  KEY `genderId` (`genderId`),
-  KEY `roleId` (`roleId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 ALTER TABLE `gender`
