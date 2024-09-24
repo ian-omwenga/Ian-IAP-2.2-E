@@ -23,6 +23,11 @@ spl_autoload_register('ClassAutoload');
 
     
 
-$Objdbconnect = new dbconnect(DBTYPE, HOSTNAME, DBPORT, HOSTUSER, HOSTPASS, DBNAME);
 
+
+    $Objdbconnect = new dbconnect(DBTYPE, HOSTNAME, DBPORT, HOSTUSER, HOSTPASS, DBNAME);
+
+
+    $ObjAuth = new authentication();
+    $ObjAuth->signup($conn);
 ?>
