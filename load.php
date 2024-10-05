@@ -21,7 +21,9 @@ spl_autoload_register('ClassAutoload');
     $ObjMenus = new menus();
     $ObjContents = new contents();
 
-    
+  
+$ObjSendMail = new sendmail();
+
 
 
 
