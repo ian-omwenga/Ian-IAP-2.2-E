@@ -22,3 +22,10 @@ $insert = $conn->insert('users', $data);
         }
     }
 }
+
+
+
+
+
+
+
