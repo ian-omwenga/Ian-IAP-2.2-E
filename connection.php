@@ -71,7 +71,125 @@ class dbconnect{
                   }
         }
     }
-
+    public function select($sql){
+        switch ($this->db_type) {
+            case 'MySQLi':
+                $result = $this->connection->query($sql);
+                return $result ? $result->fetch_assoc() : null;
+                break;
+            case 'PDO':
+                $stmt = $this->connection->prepare($sql);
+                $stmt->execute();
+                return $stmt->fetch(PDO::FETCH_ASSOC);
+                break;
+        }
+    }
+    
+    public function select_while($sql){
+        switch ($this->db_type) {
+            case 'MySQLi':
+                $result = $this->connection->query($sql);
+                $res = [];
+                while($row = $result->fetch_assoc()) {
+                    $res[] = $row;
+                }
+                return $res;
+                break;        
+            case 'PDO':
+                $stmt = $this->connection->prepare($sql);
+                $stmt->execute();
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+                break;
+        }
+    }
+    
+    public function update($table, $data, $where){
+        $wer = '';
+        if (is_array($where)) {
+            foreach ($where as $key => $value) {
+                $wer .= "$key = '$value' AND ";
+            }
+            $wer = substr($wer, 0, -4); 
+            $where = $wer;
+        }
+    
+        ksort($data);  
+        $fieldDetails = '';
+        foreach ($data as $key => $value) {
+            $fieldDetails .= "$key = '$value', ";
+        }
+        $fieldDetails = rtrim($fieldDetails, ', ');  
+    
+        if (empty($where)) {
+            $sth = "UPDATE $table SET $fieldDetails";
+        } else {
+            $sth = "UPDATE $table SET $fieldDetails WHERE $where";
+        }
+    
+        return $this->extracted($sth);
+    }
+    
+    public function delete($table, $where){
+        $wer = '';
+        if (is_array($where)) {
+            foreach ($where as $key => $value) {
+                $wer .= "$key = '$value' AND ";
+            }
+            $wer = substr($wer, 0, -4); 
+            $where = $wer;
+        }
+    
+        if (empty($where)) {
+            $sth = "DELETE FROM $table";
+        } else {
+            $sth = "DELETE FROM $table WHERE $where";
+        }
+    
+        return $this->extracted($sth);
+    }
+    
+    public function truncate($table){
+        $sth = "TRUNCATE $table";
+        return $this->extracted($sth);
+    }
+    
+    public function last_id(){
+        switch ($this->db_type) {
+            case 'MySQLi':
+                return $this->connection->insert_id;
+                break;    
+            case 'PDO':
+                return $this->connection->lastInsertId();
+                break;
+        }
+    }
+    
+    /**
+     * Execute SQL query and handle MySQLi and PDO responses
+     * @param string $sth
+     * @return bool|string
+     */
+    public function extracted(string $sth){
+        switch ($this->db_type) {
+            case 'MySQLi':
+                if ($this->connection->query($sth) === TRUE) {
+                    return TRUE;
+                } else {
+                    return "Error: " . $sth . "<br>" . $this->connection->error;
+                }
+                break;        
+            case 'PDO':
+                try {
+                    $stmt = $this->connection->prepare($sth);
+                    $stmt->execute();
+                    return TRUE;
+                } catch (PDOException $e) {
+                    return $sth . "<br>" . $e->getMessage();
+                }
+                break;
+        }
+    }
+    
     function getConnection(){
         return $this->connection;
     }
