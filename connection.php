@@ -58,7 +58,7 @@ class dbconnect{
                 if($this->connection->query($sth) === TRUE){
                     return TRUE;
                 }else{
-                    //return "Error: " . $sth . "<br>" . $this->connection->error;
+                    // return "Error: " . $sth . "<br>" . $this->connection->error;
                 }
 
                 break;
