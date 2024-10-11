@@ -22,7 +22,7 @@ spl_autoload_register('ClassAutoload');
     $ObjContents = new contents();
 
     $ObjGlob = new fncs();
-$ObjSendMail = new sendmail();
+    $ObjSendMail = new sendmail();
 
 
 
