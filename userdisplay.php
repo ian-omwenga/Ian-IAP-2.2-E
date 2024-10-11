@@ -15,14 +15,10 @@ class userdisplay {
 
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
-        return $stmt;
+        return $stmt->fetchAll(PDO::FETCH_ASSOC); // Fetch all users as an associative array
     }
 }
 
-
-$db = $database->getConnection();
-$userDisplay = new userdisplay($db);
-$users = $userDisplay->readAll();
 ?>
 
 <!DOCTYPE html>
@@ -46,12 +42,18 @@ $users = $userDisplay->readAll();
                 </tr>
             </thead>
             <tbody>
-                <?php while ($row = $users->fetch(PDO::FETCH_ASSOC)) { ?>
+                <?php
+                require_once 'load.php'; 
+                $db = $Objdbconnect->getConnection();
+                $userDisplay = new userdisplay($db);
+                $users = $userDisplay->readAll();
+
+                foreach ($users as $user) { ?>
                     <tr>
-                        <td><?php echo $row['fullname']; ?></td>
-                        <td><?php echo $row['email']; ?></td>
-                        <td><?php echo $row['gender']; ?></td>
-                        <td><?php echo $row['role']; ?></td>
+                        <td><?php echo htmlspecialchars($user['fullname']); ?></td>
+                        <td><?php echo htmlspecialchars($user['email']); ?></td>
+                        <td><?php echo htmlspecialchars($user['gender']); ?></td>
+                        <td><?php echo htmlspecialchars($user['role']); ?></td>
                     </tr>
                 <?php } ?>
             </tbody>
@@ -59,3 +61,4 @@ $users = $userDisplay->readAll();
     </div>
 </body>
 </html>
+
