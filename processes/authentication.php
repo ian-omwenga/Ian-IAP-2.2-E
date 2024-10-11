@@ -95,4 +95,29 @@ class authentication {
             }
         }
     }
-}
+
+    public function verification($conn, $ObjGlob, $ObjSendMail, $lang, $conf){
+        if(isset($_POST["verification"])){
+            $errors = array();
+            $ver_code = $_SESSION["verification"] = $conn->escape_values($_POST["verification"]."454");
+            if(!is_numeric($ver_code)){
+                $errors['Not_numeric'] = "Invalid code. The code should be a digit";
+            }
+            if(strlen($ver_code < 5) || strlen($ver_code > 5) ) {
+                $errors['invalid_len'] = "Invalid code. The code should have 5 digits";
+            }
+            // Check verification code Exists
+            $spot_ver_code_res = $conn->count_results(sprintf("SELECT ver_code FROM users WHERE verification = '%d' LIMIT 1", $ver_code));
+            if ($spot_ver_code_res != 1){
+                $errors['ver_code_not_exist'] = "Invalid code.";
+            }
+            if(!count($errors)){
+                die('All Correct');
+            }else{
+                $ObjGlob->setMsg('msg', 'Error(s)', 'invalid');
+                $ObjGlob->setMsg('errors', $errors, 'invalid');
+            }
+            }
+        }
+    }
+
