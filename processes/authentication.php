@@ -1,31 +1,98 @@
 <?php
-class authentication
-{
-    public function signup($conn){
 
-        if(isset($_POST["signup"])){
-            $fullname = $conn->real_escape_string($_POST["fullname"]);
-            $email_address = $_POST["email_address"];
-            $username = $_POST["username"];
+class authentication {
 
-$cols = ['fullname', 'email', 'username', 'genderId', 'roleId'];
-$vals = [$fullname, $email_address, $username, 1, 1];
-$data = array_combine($cols, $vals);
-$insert = $conn->insert('users', $data);
-    if($insert === TRUE){
-        header('Location: signup.php');
-        exit();
-    }else{
-      
-        die($insert);
+    // Function to replace placeholders with actual values in the template
+    public function bind_to_template($replacements, $template) {
+        return preg_replace_callback('/{{(.+?)}}/', function($matches) use ($replacements) {
+            return $replacements[$matches[1]] ?? ''; // Return the replacement value or empty if not set
+        }, $template);
     }
+
+    // Signup function with form validation, error checking, and sending a verification email
+    public function signup($conn, $ObjGlob, $ObjSendMail, $lang, $conf) {
+        if (isset($_POST["signup"])) {
+            $errors = array();
+
+            // Escaping and formatting input values
+            $fullname = $_SESSION["fullname"] = $conn->escape_values(ucwords(strtolower($_POST["fullname"])));
+            $email_address = $_SESSION["email_address"] = $conn->escape_values(strtolower($_POST["email_address"]));
+            $username = $_SESSION["username"] = $conn->escape_values(strtolower($_POST["username"]));
+
+            // Validate only letters 
+            if (ctype_alpha(str_replace(" ", "", str_replace("\'", "", $fullname))) === FALSE) {
+                $errors['nameLetters_err'] = "Invalid name format: Full name must contain only letters and spaces.";
+            }
+
+            // Validate email format
+            if (!filter_var($email_address, FILTER_VALIDATE_EMAIL)) {
+                $errors['email_format_err'] = 'Invalid email format.';
+            }
+
+            // Validate email 
+            $arr_email_address = explode("@", $email_address);
+            $spot_dom = end($arr_email_address);
+
+            if (!in_array($spot_dom, $conf['valid_domains'])) {
+                $errors['mailDomain_err'] = "Invalid email domain. Use only: " . implode(", ", $conf['valid_domains']);
+            }
+
+            // Check if email already exists
+            $spot_email_address_res = $conn->count_results(sprintf("SELECT email FROM users WHERE email = '%s' LIMIT 1", $email_address));
+            if ($spot_email_address_res > 0) {
+                $errors['mailExists_err'] = "Email already exists.";
+            }
+
+            // Check if username already exists
+            $spot_username_res = $conn->count_results(sprintf("SELECT username FROM users WHERE username = '%s' LIMIT 1", $username));
+            if ($spot_username_res > 0) {
+                $errors['usernameExists_err'] = "Username already exists.";
+            }
+
+            // Verify if username contains only letters
+            if (!ctype_alpha($username)) {
+                $errors['usernameLetters_err'] = "Invalid username format. Username must contain letters only without spaces.";
+            }
+
+            // Proceed with registration if no errors
+            if (empty($errors)) {
+                $cols = ['fullname', 'email', 'username', 'ver_code', 'ver_code_time'];
+                $vals = [$fullname, $email_address, $username, $conf['verification_code'], $conf['ver_code_time']];
+                $data = array_combine($cols, $vals);
+
+                // Insert data into the database
+                $insert = $conn->insert('users', $data);
+
+                if ($insert === TRUE) {
+                    // Prepare email template
+                    $replacements = array(
+                        'fullname' => $fullname,
+                        'email_address' => $email_address,
+                        'verification_code' => $conf['verification_code'],
+                        'site_full_name' => strtoupper($conf['site_initials'])
+                    );
+
+                    // Send verification email
+                    $ObjSendMail->SendMail([
+                        'to_name' => $fullname,
+                        'to_email' => $email_address,
+                        'subject' => $this->bind_to_template($replacements, $lang["AccountVerification"]),
+                        'message' => $this->bind_to_template($replacements, $lang["AccRegVer_template"])
+                    ]);
+
+                    // Redirect to verification page
+                    header('Location: verify_code.php');
+                    // Clear session data
+                    unset($_SESSION["fullname"], $_SESSION["email_address"], $_SESSION["username"]);
+                    exit();
+                } else {
+                    // Handle insert failure (
+                    $errors['insert_err'] = "Registration failed. Please try again later.";
+                }
+            } else {
+                // Handle validation errors 
+                $ObjGlob->setMsg('signup_errors', $errors, 'alert-danger');
+            }
         }
     }
 }
-
-
-
-
-
-
-
