@@ -46,12 +46,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user->roleId = $_POST['roleId'];
 
     if ($user->create($conn)) {
-        echo "Unable to register the user.";
+        echo "Not able to register user.";
     } else {
         echo "Registration Successful";
     }
 }
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -66,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
     <div class="container">
-        <h2 class="text-center mt-4">Sign Up</h2>
+        <h2 class="text-center mt-4"> User Sign Up</h2>
         <form action="signup.php" method="POST" class="mt-4">
             <div class="mb-3">
                 <label for="fullname" class="form-label">Full Name</label>
