@@ -2,7 +2,6 @@
 
 class authentication {
 
-    // Function to replace placeholders with actual values in the template
     public function bind_to_template($replacements, $template) {
         return preg_replace_callback('/{{(.+?)}}/', function($matches) use ($replacements) {
             return $replacements[$matches[1]] ?? ''; // Return the replacement value or empty if not set

@@ -4,17 +4,21 @@ require "connection.php";
 require "constants.php";
 
 
-function ClassAutoload($ClassName){
-   $directories = ["forms", "processes", "structure", "tables", "global", "store"];
+function ClassAutoload($ClassName) {
+    // Directories to search for class files
+    $directories = ["forms", "processes", "structure", "tables", "global", "store"];
 
-   foreach($directories AS $dir){
-        $FileName = dirname(__FILE__) . DIRECTORY_SEPARATOR . $dir .  DIRECTORY_SEPARATOR . $ClassName . '.php';
+    foreach ($directories as $dir) {
+                $FileName = dirname(__FILE__) . DIRECTORY_SEPARATOR . $dir . DIRECTORY_SEPARATOR . $ClassName . '.php';
 
-        if(file_exists($FileName) AND is_readable($FileName)){
-         require $FileName;
+        if (file_exists($FileName) && is_readable($FileName)) {
+            require_once $FileName;
+            break; 
         }
-   }
+    }
 }
+
+
 spl_autoload_register('ClassAutoload');
 
 
