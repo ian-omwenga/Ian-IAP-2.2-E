@@ -68,7 +68,7 @@ class authentication {
                     $replacements = array(
                         'fullname' => $fullname,
                         'email_address' => $email_address,
-                        'verification_code' => $conf['verification_code'],
+                        'verification' => $conf['verification'],
                         'site_full_name' => strtoupper($conf['site_initials'])
                     );
 
@@ -81,7 +81,7 @@ class authentication {
                     ]);
 
                     // Redirect to verification page
-                    header('Location: verify_code.php');
+                    header('Location: verification.php');
                     // Clear session data
                     unset($_SESSION["fullname"], $_SESSION["email_address"], $_SESSION["username"]);
                     exit();
