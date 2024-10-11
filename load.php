@@ -21,8 +21,7 @@ spl_autoload_register('ClassAutoload');
     $ObjMenus = new menus();
     $ObjContents = new contents();
 
-    $ObjGlob = new fncs();
-    $ObjSendMail = new sendmail();
+    
 
 
 
@@ -31,5 +30,5 @@ spl_autoload_register('ClassAutoload');
 
 
     $ObjAuth = new authentication();
-    $ObjAuth->signup($conn);
+   // $ObjAuth->signup($conn);
 ?>
