@@ -1,8 +1,8 @@
-
 <?php
 
 require "connection.php";
 require "constants.php";
+
 
 function ClassAutoload($ClassName){
    $directories = ["forms", "processes", "structure", "tables", "global", "store"];
@@ -17,20 +17,18 @@ function ClassAutoload($ClassName){
 }
 spl_autoload_register('ClassAutoload');
 
-    $ObjLayouts = new layouts();
-    $ObjMenus = new menus();
-    $ObjContents = new contents();
 
-   $ObjGlob = new fncs();
-$ObjSendMail = new sendmail();
-    $ObjAuth-> verification($conn, $ObjGlob, $ObjSendMail, $lang, $conf);
+$ObjLayouts = new layouts();
+$ObjMenus = new menus();
+$ObjContents = new contents();
 
-
-
-
-    $Objdbconnect = new dbconnect(DBTYPE, HOSTNAME, DBPORT, HOSTUSER, HOSTPASS, DBNAME);
+$ObjGlob = new fncs();  
+$ObjSendMail = new sendmail();  
+// Instantiate authentication object
+$ObjAuth = new authentication();
 
 
-    $ObjAuth = new authentication();
-   // $ObjAuth->signup($conn);
+// Database connection object
+$Objdbconnect = new dbconnect(DBTYPE, HOSTNAME, DBPORT, HOSTUSER, HOSTPASS, DBNAME);
+
 ?>
