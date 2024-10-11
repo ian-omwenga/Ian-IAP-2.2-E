@@ -10,16 +10,16 @@ class sendmail {
         $mail = new PHPMailer(true);
 
         try {
-            $mail->SMTPDebug = 2; // Debug info
+            $mail->SMTPDebug = 2; 
             $mail->isSMTP();
             $mail->Host       = 'smtp.gmail.com';
             $mail->SMTPAuth   = true;
             $mail->Username   = 'omwengaim@gmail.com'; // Your Gmail address
-            $mail->Password   = 'Ged!on77'; // Your email password
+            $mail->Password   = 'jfsm jlmo gxgb xzxy'; // Your email password
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
             $mail->Port       = 465;
 
-            $mail->setFrom('ics@gmail.com', 'ICS 2024');
+            $mail->setFrom('my_email@gmail.com', 'Mailer');
             $mail->addAddress($mailMsg['to_email'], $mailMsg['to_name']);
 
             $mail->isHTML(true);
@@ -34,7 +34,7 @@ class sendmail {
     }
 }
 
-// Call the sendmail function after the class definition
+// Call the sendmail function 
 $mailMsg = [
     'to_email' => 'omwengaim@gmail.com',
     'to_name'  => 'IANNO',
