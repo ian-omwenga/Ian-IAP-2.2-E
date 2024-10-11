@@ -21,7 +21,10 @@ spl_autoload_register('ClassAutoload');
     $ObjMenus = new menus();
     $ObjContents = new contents();
 
-   $ObjAuth->verification($conn, $ObjGlob, $ObjSendMail, $lang, $conf);
+   $ObjGlob = new fncs();
+$ObjSendMail = new sendmail();
+    $ObjAuth-> verification($conn, $ObjGlob, $ObjSendMail, $lang, $conf);
+
 
 
 
