@@ -24,8 +24,12 @@ $ObjContents = new contents();
 
 $ObjGlob = new fncs();  
 $ObjSendMail = new sendmail();  
+
 // Instantiate authentication object
 $ObjAuth = new authentication();
+
+// Call the signup method with all required arguments
+$ObjAuth->signup($conn, $ObjGlob, $ObjSendMail, $lang, $conf);
 
 
 // Database connection object
