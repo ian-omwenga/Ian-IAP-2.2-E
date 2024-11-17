@@ -10,7 +10,7 @@ class sendmail {
         $mail = new PHPMailer(true);
 
         try {
-            $mail->SMTPDebug = 2; 
+            $mail->SMTPDebug = 0; 
             $mail->isSMTP();
             $mail->Host       = 'smtp.gmail.com';
             $mail->SMTPAuth   = true;
@@ -38,8 +38,8 @@ class sendmail {
 $mailMsg = [
     'to_email' => 'omwengaim@gmail.com',
     'to_name'  => 'IANNO',
-    'subject'  => 'MY SUBJECT IS brooo',
-    'message'  => 'What is up brooo'
+    'subject'  => 'Verification code',
+    'message'  => '17389'
 ];
 
 $mailer = new sendmail();

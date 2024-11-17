@@ -1,5 +1,5 @@
 <?php
-class fncs {
+class functions {
     public function __construct() {
         
         if (session_status() == PHP_SESSION_NONE) {
