@@ -9,7 +9,7 @@ class authentication {
     }
 
     // Signup function with form validation, error checking, and sending a verification email
-    public function signup($conn, $ObjGlob, $ObjSendMail, $lang, $conf) {
+    public function signup($conn, $ObjGlob, $ObjSendMail, $conf) {
         if (isset($_POST["signup"])) {
             $errors = array();
 

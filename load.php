@@ -36,7 +36,7 @@ $Objdbconnect = new dbconnect(DBTYPE, HOSTNAME, DBPORT, HOSTUSER, HOSTPASS, DBNA
 
 
 // Call the signup method with all required arguments
-$ObjAuth->signup($Objdbconnect, $ObjGlob, $ObjSendMail, $lang, $conf);
+$ObjAuth->signup($Objdbconnect, $ObjGlob, $ObjSendMail,  $conf);
 
 
 
